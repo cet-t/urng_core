@@ -43,12 +43,13 @@ macro_rules! impl_word {
                         (max as $crate::randi_wide!(i $bits) - min as $crate::randi_wide!(i $bits) + 1)
                         as $crate::randi_wide!(u $bits)
                     };
-                    ((self as $crate::randi_wide!(u $bits) * range) >> $bits) as [<i $bits>] + min
+                    (((self as $crate::randi_wide!(u $bits) * range) >> $bits) as [<i $bits>]).wrapping_add(min)
                 }
 
                 #[inline(always)]
                 fn randf(self, min: Self::Float, max: Self::Float) -> Self::Float {
-                    self.to_float() * (max - min) + min
+                    let v = self.to_float() * (max - min) + min;
+                    if v < max { v } else { max.next_down() }
                 }
             }
         })+

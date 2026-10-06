@@ -30,6 +30,19 @@ fn main() {
     let _: u32 = rng.nextu();             // [0, 2^32-1]
     let _: f32 = rng.nextf();             // [0, 1)
     let _: i32 = rng.randi(-10, 10);      // [-10, 10]
-    let _: f32 = rng.randf(-1.0, 1.0);    // [-10.0, 10.0)
+    let _: f32 = rng.randf(-1.0, 1.0);    // [-1.0, 1.0)
 }
 ```
+
+## Notes
+
+- **Not suitable for cryptographic use.**
+  - This crate does not provide cryptographic guarantees. The bias described below can be exploited when generating keys, nonces, or tokens.
+
+- **`randi` has a slight bias.** This function uses "multiply-shift" to map a word to the range `[min, max]` without rejection sampling. Let `N` be the word width (32 or 64) and `range = max - min + 1`. Then:
+  - If `2^N` is divisible by `range` (e.g., `range` is a power of two), the result is perfectly uniform.
+  - Otherwise, each value is generated from either `floor(2^N / range)` or `ceil(2^N / range)` input words, so the probability of each value differs by at most `2^-N`.
+  - The relative bias (the ratio of the highest to lowest probability) is `ceil / floor`, which is approximately `1 + range / 2^N` when `range` is much smaller than `2^N`. When `range` is slightly larger than `2^(N-1)`, this ratio can be up to 2:1.
+  - For perfect uniformity, apply rejection sampling in addition to `nextu`.
+
+- `randi` assumes `min <= max` but does not check this condition.
