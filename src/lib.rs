@@ -1,7 +1,7 @@
 #![doc = include_str!("../crates-readme.md")]
 #![no_std]
 
-mod internal;
+pub(crate) mod internal;
 mod rng;
 #[cfg(test)]
 mod tests;
@@ -9,3 +9,5 @@ mod word;
 
 pub use crate::rng::Rng;
 pub use crate::word::Word;
+
+pub(crate) use crate::internal::*;

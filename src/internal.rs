@@ -1,4 +1,3 @@
-#[macro_export(local_inner_macros)]
 macro_rules! randi_wide {
     (i 32) => {
         i64
@@ -13,8 +12,8 @@ macro_rules! randi_wide {
         u128
     };
 }
+pub(crate) use randi_wide;
 
-#[macro_export(local_inner_macros)]
 macro_rules! i2f_bits {
     (32 bits) => {
         0x3F800000
@@ -29,10 +28,11 @@ macro_rules! i2f_bits {
         11
     };
 }
+pub(crate) use i2f_bits;
 
-#[macro_export(local_inner_macros)]
 macro_rules! u2f_01 {
     ($ft:ty, $bits:tt, $x:expr) => {{
-        <$ft>::from_bits(($x >> i2f_bits!($bits bias)) | i2f_bits!($bits bits)) - 1.0
+        <$ft>::from_bits(($x >> $crate::i2f_bits!($bits bias)) | $crate::i2f_bits!($bits bits)) - 1.0
     }};
 }
+pub(crate) use u2f_01;
