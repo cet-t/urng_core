@@ -1,0 +1,11 @@
+[package]
+name = "urng_core"
+version = "0.1.0"
+edition = "2024"
+keywords = ["no_std", "random", "rng"]
+description = "A minimal rng core library"
+readme = "crates-readme.md"
+
+
+[dependencies]
+pastey = "0.2.3"
