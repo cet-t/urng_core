@@ -6,11 +6,22 @@ mod sealed {
 
 /// The unsigned output word of a generator ([`u32`], [`u64`]).
 pub trait Word: self::sealed::Sealed {
+    /// The signed integer type used for ranged draws ([`i32`] / [`i64`]).
     type Int: Copy + Sized;
+
+    /// The float type produced from this word ([`f32`] for [`u32`], [`f64`] for [`u64`]).
     type Float: Copy + Sized;
 
+    /// Convert this word to a float in the range `[0.0, 1.0)`.
+    #[must_use]
     fn to_float(self) -> Self::Float;
+
+    /// Draw a random integer in the range `[min, max]`.
+    #[must_use]
     fn randi(self, min: Self::Int, max: Self::Int) -> Self::Int;
+
+    /// Draw a random float in the range `[min, max)`.
+    #[must_use]
     fn randf(self, min: Self::Float, max: Self::Float) -> Self::Float;
 }
 

@@ -1,3 +1,4 @@
+#![doc = include_str!("../crates-readme.md")]
 #![no_std]
 
 mod internal;
